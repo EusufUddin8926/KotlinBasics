@@ -1,6 +1,6 @@
 package Functions
 
-fun main(args: Array<String>) {
+fun main() {
 
     printHello()
     println("Parameters Function: " + printSum(10, 20))
@@ -11,22 +11,31 @@ fun main(args: Array<String>) {
     println("Tail Recursion: " + factorialTail(10))
     println("Higher-Order Functions: " + calculate(4, 5, ::sum))
     addTwoNumber(10, 20) { myResult ->
-        println("Higher-Order Functions Lambda as a last parameter: " + myResult)
+        println("Higher-Order Functions Lambda as a last parameter: $myResult")
     }
 
     mulTwoNumber(10, { mMul ->
-        println("Higher-Order Functions Lambda before last parameter: " + mMul)
+        println("Higher-Order Functions Lambda before last parameter: $mMul")
     }, 20)
 
-    mulTwoNumber2(10, 20, { mMul, message ->
+    mulTwoNumber2(10, 20) { mMul, message ->
         println("Higher-Order Functions Lambda with multiple parameter: $mMul is $message")
-    })
+    }
 
-    mulTwoNumber3(10,20, { mMul, message ->
+    mulTwoNumber3(10, 20) { mMul, message ->
         println("Higher-Order Functions Lambda with Non Unit return parameter: $mMul is $message")
-        mMul*2
+        mMul * 2
 
-    })
+    }
+
+    subtractTwoNumber(10,
+        5,
+        mSub = { mSub ->
+            println("Higher-Order Functions Subtraction $mSub")
+        },
+        mSub2 = { mSub2 ->
+            println("Higher-Order Functions Subtraction $mSub2")
+        })
 
 
 }
@@ -49,7 +58,7 @@ fun sumTwo(a: Int, b: Int): Int {
     return x
 }
 
-//Unit-returning Functions
+//Unit-returning Functions // java void
 fun sumTwoNumber(a: Int, b: Int): Unit {
     val x = a + b
 
@@ -108,4 +117,19 @@ fun mulTwoNumber3(number1: Int, number2: Int, mMul: (Int, String) -> Int) {
     val mul = number1 * number2;
     val result = mMul(mul, "Multiplication successful")
     println(result)
+}
+
+// inline
+// Crossline
+// noinline
+inline fun subtractTwoNumber(
+    number1: Int,
+    number2: Int,
+    crossinline mSub: (Int) -> Unit,
+    noinline mSub2: (Int) -> Unit
+) {
+    val sub = number1 - number2;
+    mSub(sub)
+    mSub2(sub + 8)
+
 }
